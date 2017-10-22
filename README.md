@@ -1,7 +1,7 @@
 # Docker ELK stack
 
 [![Join the chat at https://gitter.im/deviantony/docker-elk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deviantony/docker-elk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Elastic Stack version](https://img.shields.io/badge/ELK-5.6.3-blue.svg?style=flat)](https://github.com/deviantony/docker-elk/issues/182)
+[![Elastic Stack version](https://img.shields.io/badge/ELK-6.0.0rc1-blue.svg?style=flat)](https://github.com/deviantony/docker-elk/issues/182)
 [![Build Status](https://api.travis-ci.org/deviantony/docker-elk.svg?branch=master)](https://travis-ci.org/deviantony/docker-elk)
 
 Run the latest version of the ELK (Elasticsearch, Logstash, Kibana) stack with Docker and Docker Compose.
@@ -15,7 +15,7 @@ Based on the official Docker images:
 * [logstash](https://github.com/elastic/logstash-docker)
 * [kibana](https://github.com/elastic/kibana-docker)
 
-**Note**: Other branches in this project are available:
+**Note**: This repo is forked - Other branches in the parent project are available:
 
 * ELK 5 with X-Pack support: https://github.com/deviantony/docker-elk/tree/x-pack
 * ELK 5 in Vagrant: https://github.com/deviantony/docker-elk/tree/vagrant
@@ -27,6 +27,7 @@ Based on the official Docker images:
    * [Host setup](#host-setup)
    * [SELinux](#selinux)
 2. [Getting started](#getting-started)
+   * [Preparation](#preparation)
    * [Bringing up the stack](#bringing-up-the-stack)
    * [Initial setup](#initial-setup)
 3. [Configuration](#configuration)
@@ -63,6 +64,15 @@ $ chcon -R system_u:object_r:admin_home_t:s0 docker-elk/
 
 ## Usage
 
+### Preparation
+
+Install your certificates to certs/certs and certs/private (a matching crt and private key)
+
+
+Rename .env-example to .env and change the ELK_VERSION and IP_BIND if you need to.
+
+IP_BIND is used in front of all external ports.
+
 ### Bringing up the stack
 
 Start the ELK stack using `docker-compose`:
@@ -81,10 +91,10 @@ Give Kibana about 2 minutes to initialize, then access the Kibana web UI by hitt
 [http://localhost:5601](http://localhost:5601) with a web browser.
 
 By default, the stack exposes the following ports:
-* 5000: Logstash TCP input.
+* 5044: Logstash TCP input.
 * 9200: Elasticsearch HTTP
 * 9300: Elasticsearch TCP transport
-* 5601: Kibana
+* 15601: Kibana
 
 **WARNING**: If you're using `boot2docker`, you must access it via the `boot2docker` IP address instead of `localhost`.
 
