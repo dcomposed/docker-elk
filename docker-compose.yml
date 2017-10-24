@@ -1,14 +1,13 @@
 version: '3'
 
 services:
-
   elasticsearch:
     container_name: elasticsearch
     build:
       context: elasticsearch/
       args:
-        ELK_VERSION: ${ELK_VERSION:-5.6.3}
-    image: elasticsearch:${ELK_VERSION:-5.6.3}
+        ELK_VERSION: ${ELK_VERSION}
+    image: elasticsearch:${ELK_VERSION}
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./certs:/etc/pki/tls
@@ -18,7 +17,7 @@ services:
       - "${IP_BIND}9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELK_VERSION: ${ELK_VERSION:-5.6.3}
+      ELK_VERSION: ${ELK_VERSION}
     networks:
       - elk
 
@@ -27,8 +26,8 @@ services:
     build:
       context: logstash/
       args:
-        ELK_VERSION: ${ELK_VERSION:-5.6.3}
-    image: logstash:${ELK_VERSION:-5.6.3}
+        ELK_VERSION: ${ELK_VERSION}
+    image: logstash:${ELK_VERSION}
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
@@ -37,7 +36,7 @@ services:
       - "${IP_BIND}5044:5044"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELK_VERSION: ${ELK_VERSION:-5.6.3}
+      ELK_VERSION: ${ELK_VERSION}
     networks:
       - elk
     depends_on:
@@ -48,15 +47,15 @@ services:
     build:
       context:  kibana/
       args:
-        ELK_VERSION: ${ELK_VERSION:-5.6.3}
-    image: kibana:${ELK_VERSION:-5.6.3}
+        ELK_VERSION: ${ELK_VERSION}
+    image: kibana:${ELK_VERSION}
     volumes:
       - ./kibana/config/:/usr/share/kibana/config
       - ./certs:/etc/pki/tls
     ports:
       - "${IP_BIND}15601:5601"
     environment:
-      ELK_VERSION: ${ELK_VERSION:-5.6.3}
+      ELK_VERSION: ${ELK_VERSION}
     networks:
       - elk
     depends_on:
