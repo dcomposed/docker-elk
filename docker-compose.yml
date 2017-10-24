@@ -1,39 +1,62 @@
-version: '2'
+version: '3'
 
 services:
 
   elasticsearch:
-    build: elasticsearch/
+    container_name: elasticsearch
+    build:
+      context: elasticsearch/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    image: elasticsearch:$ELK_VERSION
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./certs:/etc/pki/tls
+      - ./storage/elasticsearch:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "$IP_BIND:9200:9200"
+      - "$IP_BIND:9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELK_VERSION: $ELK_VERSION
     networks:
       - elk
 
   logstash:
-    build: logstash/
+    container_name: logstash
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    image: logstash:$ELK_VERSION
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./certs:/etc/pki/tls
     ports:
-      - "5000:5000"
+      - "$IP_BIND:5044:5044"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELK_VERSION: $ELK_VERSION
     networks:
       - elk
     depends_on:
       - elasticsearch
 
   kibana:
-    build: kibana/
+    container_name: kibana
+    build:
+      context:  kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    image: kibana:$ELK_VERSION
     volumes:
       - ./kibana/config/:/usr/share/kibana/config
+      - ./certs:/etc/pki/tls
     ports:
-      - "5601:5601"
+      - "$IP_BIND:15601:5601"
+    environment:
+      ELK_VERSION: $ELK_VERSION
     networks:
       - elk
     depends_on:
