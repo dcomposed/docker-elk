@@ -14,8 +14,8 @@ services:
       - ./certs:/etc/pki/tls
       - ./storage/elasticsearch:/usr/share/elasticsearch/data
     ports:
-      - "$IP_BIND:9200:9200"
-      - "$IP_BIND:9300:9300"
+      - "${IP_BIND}9200:9200"
+      - "${IP_BIND}9300:9300"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELK_VERSION: $ELK_VERSION
@@ -34,7 +34,7 @@ services:
       - ./logstash/pipeline:/usr/share/logstash/pipeline
       - ./certs:/etc/pki/tls
     ports:
-      - "$IP_BIND:5044:5044"
+      - "${IP_BIND}5044:5044"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELK_VERSION: $ELK_VERSION
@@ -54,7 +54,7 @@ services:
       - ./kibana/config/:/usr/share/kibana/config
       - ./certs:/etc/pki/tls
     ports:
-      - "$IP_BIND:15601:5601"
+      - "${IP_BIND}15601:5601"
     environment:
       ELK_VERSION: $ELK_VERSION
     networks:
