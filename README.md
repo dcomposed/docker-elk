@@ -69,9 +69,15 @@ $ chcon -R system_u:object_r:admin_home_t:s0 docker-elk/
 Install your certificates to certs/certs and certs/private (a matching crt and private key)
 
 
-Rename .env-example to .env and change the ELK_VERSION and IP_BIND if you need to.
+Rename .env-example to .env and change the ELK_VERSION and IP_BIND if you need to.<br> 
+If not, it will default to the value in docker-compose.yml
 
-IP_BIND is used in front of all external ports.
+IP_BIND is added in front of all external port binding in the docker-compose.yml.<br> 
+If you have no .env file you will get a warning:
+```
+WARNING: The IP_BIND variable is not set. Defaulting to a blank string.
+```
+and the services will bind to 0.0.0.0 by default.
 
 ### Bringing up the stack
 
@@ -88,13 +94,13 @@ $ docker-compose up -d
 ```
 
 Give Kibana about 2 minutes to initialize, then access the Kibana web UI by hitting
-[http://localhost:5601](http://localhost:5601) with a web browser.
+[http://localhost:15601](http://localhost:15601) with a web browser.
 
 By default, the stack exposes the following ports:
 * 5044: Logstash TCP input.
 * 9200: Elasticsearch HTTP
 * 9300: Elasticsearch TCP transport
-* 15601: Kibana
+* 15601: Kibana (chose a non-standard port as the install is unsecured)
 
 **WARNING**: If you're using `boot2docker`, you must access it via the `boot2docker` IP address instead of `localhost`.
 
