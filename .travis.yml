@@ -1,20 +1,14 @@
 sudo: required
-
-language: generic
-
+services:
+  - docker
 env:
-  - DOCKER_COMPOSE_VERSION=1.14.0
+  - DOCKER_COMPOSE_VERSION=1.16.1
 
-install:
-  # Installing docker
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+before_install:
   - sudo apt-get update
-  - sudo apt-get -y install docker-ce
-
-  # Installing docker-compose
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - sudo rm /usr/local/bin/docker-compose
-  - curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" > docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
@@ -31,4 +25,4 @@ script:
   - sleep 4m
   - docker-compose logs
   - curl --retry 10 --retry-delay 5 -v http://localhost:9200/
-  - curl --retry 10 --retry-delay 5 -v http://localhost:5601/
+  - curl --retry 10 --retry-delay 5 -v http://localhost:15601/
