@@ -21,8 +21,12 @@ script:
   - docker-compose build
   - docker-compose up -d
 
+  - openssl req -x509 -batch -nodes -days 3650 -newkey rsa:2048 -keyout ./certs/private/logstash-beats.key -out ./certs/certs/logstash-beats.crt
+
   # Verifications
   - sleep 4m
-  - docker-compose logs
-  - curl --retry 10 --retry-delay 5 -v http://localhost:9200/
-  - curl --retry 10 --retry-delay 5 -v http://localhost:15601/
+  - docker-compose logs elasticsearch
+  - docker-compose logs kibana
+  - docker-compose logs logstash
+  #- curl --retry 10 --retry-delay 5 -v http://localhost:9200/
+  #- curl --retry 10 --retry-delay 5 -v http://localhost:15601/
